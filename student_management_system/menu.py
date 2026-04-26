@@ -2,7 +2,7 @@ def menu():
     print("\nWelcome to the Student Management System!\nPlease select an option... \n")
     while True:
         try:
-                option = int(input("\n1. Add Student\n2. View Students\n3. Top 3 Students\n4. Average Grades\n5. Delete Student\n8. Exit\n"))
+                option = int(input("\n1. Add Student\n2. View Students\n3. Top 3 Students\n4. Average Grades\n5. Delete Student\n6. Students who failed\n8. Exit\n"))
                 if option == 1:
                     from actions import add_student
                     add_student()
@@ -18,6 +18,9 @@ def menu():
                 elif option == 5:
                     from actions import delete_student
                     delete_student()
+                elif option == 6:
+                    from actions import student_failed
+                    student_failed()
                 elif option == 8:
                     print("Exiting the program. Goodbye!")
                     break
