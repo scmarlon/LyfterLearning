@@ -1,9 +1,10 @@
 import re
-student_list = [{'name': 'Marlon Sanchez', 'group': '11B', 'grades': {'spanish': 10, 'english': 20, 'science': 89, 'social_studies': 90}},
-                {'name': 'Mariana Bri', 'group': '11B', 'grades': {'spanish': 90, 'english': 80, 'science': 66, 'social_studies': 70}},
-                {'name': 'Test Student', 'group': '11B', 'grades': {'spanish': 92, 'english': 55, 'science': 78, 'social_studies': 71}},
-                {'name': 'Test Student 2', 'group': '11B', 'grades': {'spanish': 80, 'english': 90, 'science': 85, 'social_studies': 88}}]
-
+# If you want to test the functions with pre-filled data, you can uncomment the following list of students.
+# student_list = [{'name': 'Marlon Sanchez', 'group': '11B', 'grades': {'spanish': 10, 'english': 20, 'science': 89, 'social_studies': 90}},
+#                 {'name': 'Mariana Bri', 'group': '11B', 'grades': {'spanish': 90, 'english': 80, 'science': 66, 'social_studies': 70}},
+#                 {'name': 'Test Student', 'group': '11B', 'grades': {'spanish': 92, 'english': 55, 'science': 78, 'social_studies': 71}},
+#                 {'name': 'Test Test', 'group': '11B', 'grades': {'spanish': 80, 'english': 90, 'science': 85, 'social_studies': 88}}]
+student_list = []
 # Function to validate grade input and ensure it's between 0 and 100
 def validate_grade(course_name):
     try:
@@ -18,6 +19,8 @@ def validate_grade(course_name):
 
 # Function to validate name input and ensure it's not empty and doesn't contain numbers
 def is_valid_name():
+    # if not student_list or student_list == [{}]:
+    #     return
     try:
         name = name = input("Full Name: ")
         if not name.strip():
@@ -48,6 +51,8 @@ def is_valid_group():
 
 # Function to check if a student with the same name and group already exists in the student list
 def student_exists(name, group):
+    if not student_list or student_list == [{}]:
+        return 
     for student in student_list:
         if student['name'].lower() == name.lower() and student['group'].lower() == group.lower():
             print(f"Student {name} from group {group} already exists. Please enter a different student.\n")
@@ -86,6 +91,7 @@ def add_student():
             
             student_list.append(student_info)
             print(f"Student {name} has been added successfully.")
+            
             #The following loop asks the user if they want to add another student after successfully adding one.
             while True:
                 try:
@@ -108,9 +114,15 @@ def add_student():
 
 # Function to view all students in the student list, displaying their name and group
 def view_students():
-    print("View all Students")
-    for student in student_list:
-        print(f"Name: {student['name']}, Group: {student['group']}")
+    if not student_list or student_list == [{}]:
+        print("No students to display.")
+        return
+    try:
+        print("View all Students")
+        for student in student_list:
+            print(f"Name: {student['name']}, Group: {student['group']}")
+    except KeyError:
+        print("Error: One or more students do not have the required keys (name, group).")
 
 #This is a helper function to calculate the average grade of a student, which is used in the top_students and average_each_student functions. 
 def average(student):
@@ -119,19 +131,34 @@ def average(student):
 
 # Function to display the top 3 students based on their average grades, showing their name, group, and average grade.
 def top_students():
-    print("Top 3 Students")
-    sorted_students = sorted(student_list, key=average, reverse=True)
-    for student in sorted_students[:3]:
-        print(f"Name: {student['name']}, Group: {student['group']}, Average Grade: {average(student):.2f}")
+    if not student_list or student_list == [{}]:
+        print("No students to display.")
+        return
+    try:
+        print("Top 3 Students")
+        sorted_students = sorted(student_list, key=average, reverse=True)
+        for student in sorted_students[:3]:
+            print(f"Name: {student['name']}, Group: {student['group']}, Average Grade: {average(student):.2f}")
+    except KeyError:
+        print("Error: One or more students do not have the required keys (name, group).")
 
 # Function to calculate and display the average grade of each student, showing their name and average grade.
 def average_each_student():
-    print("Average grade of each student")
-    for student in student_list:
-        print(f"Name: {student['name']}, Average Grade: {average(student):.2f}")
+    if not student_list or student_list == [{}]:
+        print("No students to display.")
+        return
+    try:
+        print("Average grade of each student")
+        for student in student_list:
+            print(f"Name: {student['name']}, Average Grade: {average(student):.2f}")
+    except KeyError:
+        print("Error: One or more students do not have the required keys (name, group).")
 
 # Function to delete a student from the student list based on their name and group, with confirmation before deletion.
 def delete_student():
+    if not student_list or student_list == [{}]:
+        print("No students to delete.")
+        return
     print("Delete a Student by Name and Group")
     while True:
         try:
@@ -164,6 +191,9 @@ def delete_student():
 
 # Function to display students who have failed at least one course, showing their name, group, and the courses they failed along with the grades.
 def student_failed():
+    if not student_list or student_list == [{}]:
+        print("No students to display.")
+        return
     print("\nStudents who failed at least one course:")
     for student in student_list:
         try:
