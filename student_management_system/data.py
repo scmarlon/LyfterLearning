@@ -1,8 +1,7 @@
 import csv
 
 # This function exports the student data to a CSV file named 'students.csv'. It includes the student's name, group, and their grades for each course. The grades are formatted as "course: grade" pairs, separated by semicolons.
-def export_data_CSV():
-    from actions import student_list
+def export_data_CSV(student_list):
     if not student_list or student_list == [{}]:
         print("No students to export.")
         return
@@ -19,8 +18,7 @@ def export_data_CSV():
 
 
 # This function imports student data from a CSV file named 'students.csv'. If the file does not exist, it handles the FileNotFoundError and returns an empty list.
-def import_data_CSV():
-    student_list = []
+def import_data_CSV(student_list):
     try:
         with open('students.csv', mode='r') as file:
             reader = csv.DictReader(file)
@@ -35,6 +33,7 @@ def import_data_CSV():
                 student_list.append({'name': name, 'group': group, 'grades': grades})
         print("\nStudent data imported successfully from students.csv.")
         print("Current student list:\n", student_list)
+        return student_list
     except FileNotFoundError:
         print("\nNo existing student data CSV file found.")
         return []

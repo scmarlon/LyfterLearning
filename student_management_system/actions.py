@@ -1,10 +1,5 @@
 import re
-# If you want to test the functions with pre-filled data, you can uncomment the following list of students.
-# student_list = [{'name': 'Marlon Sanchez', 'group': '11B', 'grades': {'spanish': 10, 'english': 20, 'science': 89, 'social_studies': 90}},
-#                 {'name': 'Mariana Bri', 'group': '11B', 'grades': {'spanish': 90, 'english': 80, 'science': 66, 'social_studies': 70}},
-#                 {'name': 'Test Student', 'group': '11B', 'grades': {'spanish': 92, 'english': 55, 'science': 78, 'social_studies': 71}},
-#                 {'name': 'Test Test', 'group': '11B', 'grades': {'spanish': 80, 'english': 90, 'science': 85, 'social_studies': 88}}]
-student_list = []
+
 # Function to validate grade input and ensure it's between 0 and 100
 def validate_grade(course_name):
     try:
@@ -50,7 +45,7 @@ def is_valid_group():
         return is_valid_group()
 
 # Function to check if a student with the same name and group already exists in the student list
-def student_exists(name, group):
+def student_exists(name, group, student_list):
     if not student_list or student_list == [{}]:
         return 
     for student in student_list:
@@ -60,7 +55,7 @@ def student_exists(name, group):
     return False
 
 # Function to add a student to the student list, including validation for name, group, and grades
-def add_student():
+def add_student(student_list):
     print("Please complete the information of the student.\n")
     while True:
         bool = False
@@ -70,8 +65,8 @@ def add_student():
             name = is_valid_name()
             group = is_valid_group()
 
-            if student_exists(name, group):
-                return add_student()
+            if student_exists(name, group, student_list):
+                return add_student(student_list)
 
             spanish_grade = validate_grade("Spanish Grade: ")
             grade_list["spanish"] = spanish_grade
@@ -113,7 +108,7 @@ def add_student():
             continue
 
 # Function to view all students in the student list, displaying their name and group
-def view_students():
+def view_students(student_list):
     if not student_list or student_list == [{}]:
         print("No students to display.")
         return
@@ -130,7 +125,7 @@ def average(student):
     return sum(grades) / len(grades)
 
 # Function to display the top 3 students based on their average grades, showing their name, group, and average grade.
-def top_students():
+def top_students(student_list):
     if not student_list or student_list == [{}]:
         print("No students to display.")
         return
@@ -142,8 +137,18 @@ def top_students():
     except KeyError:
         print("Error: One or more students do not have the required keys (name, group).")
 
+def average_all_students(student_list):
+    if not student_list or student_list == [{}]:
+        print("No students to display.")
+        return
+    try:
+        total_average = sum(average(student) for student in student_list) / len(student_list)
+        print(f"\nAverage grade of all students: {total_average:.2f}")
+    except KeyError:
+        print("Error: One or more students do not have the required keys (name, group).")
+
 # Function to calculate and display the average grade of each student, showing their name and average grade.
-def average_each_student():
+def average_each_student(student_list):
     if not student_list or student_list == [{}]:
         print("No students to display.")
         return
@@ -151,11 +156,12 @@ def average_each_student():
         print("Average grade of each student")
         for student in student_list:
             print(f"Name: {student['name']}, Average Grade: {average(student):.2f}")
+        average_all_students(student_list)
     except KeyError:
         print("Error: One or more students do not have the required keys (name, group).")
 
 # Function to delete a student from the student list based on their name and group, with confirmation before deletion.
-def delete_student():
+def delete_student(student_list):
     if not student_list or student_list == [{}]:
         print("No students to delete.")
         return
@@ -190,7 +196,7 @@ def delete_student():
             continue
 
 # Function to display students who have failed at least one course, showing their name, group, and the courses they failed along with the grades.
-def student_failed():
+def student_failed(student_list):
     if not student_list or student_list == [{}]:
         print("No students to display.")
         return
