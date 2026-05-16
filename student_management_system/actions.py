@@ -2,55 +2,47 @@ import re
 
 # Function to validate grade input and ensure it's between 0 and 100
 def validate_grade(course_name):
-    try:
-        grade = int(input(f"{course_name}"))
-        if grade < 0 or grade > 100:
+    while True:
+        try:
+            grade = int(input(f"Enter the grade for {course_name}: "))
+            if 0 <= grade <= 100:
+                return grade
             print("Grade must be between 0 and 100.")
-            return validate_grade(course_name)
-        return grade
-    except ValueError:
-        print("Invalid grade. Please enter a valid integer.")
-        return validate_grade(course_name)
+        except ValueError:
+            print("Invalid grade. Please enter a valid integer.")
 
 # Function to validate name input and ensure it's not empty and doesn't contain numbers
 def is_valid_name():
-    # if not student_list or student_list == [{}]:
-    #     return
-    try:
-        name = name = input("Full Name: ")
-        if not name.strip():
-            print("Name cannot be empty.")
-            return is_valid_name()
-        if any(char.isdigit() for char in name):
-            print("Name cannot contain numbers.")
-            return is_valid_name()
-        return name
-    except ValueError:
-        print("Invalid name. Please enter a valid name.")
-        return is_valid_name()
+        while True:
+            name = input("Full Name: ").strip()
+            if not name:
+                print("Name cannot be empty.")
+                continue
+            if any(char.isdigit() for char in name):
+                print("Name cannot contain numbers.")
+                continue
+            return name
 
 # Function to validate group input and ensure it's in the correct format (e.g., 10A, 11B, etc.)
 def is_valid_group():
-    try:
-        group = input("Group: ")
-        if not group.strip():
+    while True:
+        group = input("Group: ").strip()
+        if not group:
             print("Group cannot be empty.")
-            return is_valid_group()
+            continue
         if not re.fullmatch(r'(1[0-2]|[1-9])[A-Z]+', group): #re library to validate the group format, use fullmatch to ensure the entire string matches the pattern
-            print("The group must be in format 10A, 11B, etc.")
-            return is_valid_group()
+            print("The group must be in format 1A, 8B, 12C etc.")
+            continue
         return group
-    except ValueError:
-        print("Invalid group. Please enter a valid group.")
-        return is_valid_group()
 
 # Function to check if a student with the same name and group already exists in the student list
-def student_exists(name, group, student_list):
+def student_exists(name, group, student_list, check_coming):
     if not student_list or student_list == [{}]:
-        return 
+        return False
     for student in student_list:
         if student['name'].lower() == name.lower() and student['group'].lower() == group.lower():
-            print(f"Student {name} from group {group} already exists. Please enter a different student.\n")
+            if not check_coming:
+                print(f"Student {name} from group {group} already exists. Please enter a different student.\n")
             return True
     return False
 
@@ -58,54 +50,47 @@ def student_exists(name, group, student_list):
 def add_student(student_list):
     print("Please complete the information of the student.\n")
     while True:
-        bool = False
+        continue_loop  = False
         grade_list = {}
         student_info = {}
-        try:
-            name = is_valid_name()
-            group = is_valid_group()
+        name = is_valid_name()
+        group = is_valid_group()
 
-            if student_exists(name, group, student_list):
-                return add_student(student_list)
+        if student_exists(name, group, student_list, check_coming=False):
+            return add_student(student_list)
 
-            spanish_grade = validate_grade("Spanish Grade: ")
-            grade_list["spanish"] = spanish_grade
+        spanish_grade = validate_grade("Spanish")
+        grade_list["spanish"] = spanish_grade
 
-            english_grade = validate_grade("English Grade: ")
-            grade_list["english"] = english_grade
+        english_grade = validate_grade("English")
+        grade_list["english"] = english_grade
 
-            science_grade = validate_grade("Science Grade: ")
-            grade_list["science"] = science_grade
+        science_grade = validate_grade("Science")
+        grade_list["science"] = science_grade
 
-            social_studies_grade = validate_grade("Social Studies Grade: ")
-            grade_list["social_studies"] = social_studies_grade
+        social_studies_grade = validate_grade("Social Studies")
+        grade_list["social_studies"] = social_studies_grade
 
-            student_info["name"] = name
-            student_info["group"] = group
-            student_info["grades"] = grade_list
-            
-            student_list.append(student_info)
-            print(f"Student {name} has been added successfully.")
-            
-            #The following loop asks the user if they want to add another student after successfully adding one.
-            while True:
-                try:
-                    forward = input("Do you want to add another student? (yes/no): ")
-                    if forward.lower() == "yes":
-                        break
-                    elif forward.lower() == "no":
-                        print("Student information has been saved.")
-                        bool = True
-                        break 
-                    elif forward.lower() not in ["yes", "no"]:
-                        print("Invalid input. Please enter 'yes' or 'no'.")
-                except ValueError:
-                    print("Invalid input. Please enter 'yes' or 'no'.")
-            if bool:
-                return student_list
-        except ValueError:
-            print("Invalid input. Please enter the correct information.")
-            continue
+        student_info["name"] = name
+        student_info["group"] = group
+        student_info["grades"] = grade_list
+        
+        student_list.append(student_info)
+        print(f"Student {name} has been added successfully.")
+        
+        #The following loop asks the user if they want to add another student after successfully adding one.
+        while True:
+            forward = input("Do you want to add another student? (yes/no): ")
+            if forward.lower() == "yes":
+                break
+            elif forward.lower() == "no":
+                print("Student information has been saved.")
+                continue_loop  = True
+                break 
+            elif forward.lower() not in ["yes", "no"]:
+                print("Invalid input. Please enter 'yes' or 'no'.")  
+        if continue_loop :
+            return student_list
 
 # Function to view all students in the student list, displaying their name and group
 def view_students(student_list):
@@ -115,9 +100,16 @@ def view_students(student_list):
     try:
         print("View all Students")
         for student in student_list:
-            print(f"Name: {student['name']}, Group: {student['group']}")
+            print(f"\nName: {student['name']}")
+            print(f"Group: {student['group']}")
+            print("Grades:")
+            for course, grade in student["grades"].items():
+                print(f"  - {course}: {grade}")
+            print("-" * 30) 
     except KeyError:
         print("Error: One or more students do not have the required keys (name, group).")
+
+
 
 #This is a helper function to calculate the average grade of a student, which is used in the top_students and average_each_student functions. 
 def average(student):
