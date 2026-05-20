@@ -55,4 +55,4 @@ def import_data_CSV(student_list):
         return student_list
     except FileNotFoundError:
         print("\nNo existing student data CSV file found.")
-        return []
+        return student_list

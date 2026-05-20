@@ -57,7 +57,7 @@ def add_student(student_list):
         group = is_valid_group()
 
         if student_exists(name, group, student_list, check_coming=False):
-            return add_student(student_list)
+            continue
 
         spanish_grade = validate_grade("Spanish")
         grade_list["spanish"] = spanish_grade
