@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import math
 
 class Shape(ABC):
     @abstractmethod
@@ -14,11 +15,11 @@ class Circle(Shape):
         self.radius = radius
 
     def calculate_area(self):
-        return 3.14 * self.radius ** 2
+        return math.pi * self.radius ** 2
 
     def calculate_perimeter(self):
-        return 2 * 3.14 * self.radius
-    
+        return 2 * math.pi * self.radius
+
 class Square(Shape):
     def __init__(self, side_length):
         self.side_length = side_length
@@ -43,7 +44,7 @@ class Rectangle(Shape):
 
 
 circle1 = Circle(radius=5)
-print(f"Area of the circle: {circle1.calculate_area()} and perimeter: {circle1.calculate_perimeter()}")  # Area of the circle: 78.5 and perimeter: 31.4
+print(f"\nArea of the circle: {circle1.calculate_area()} and perimeter: {circle1.calculate_perimeter()}")  # Area of the circle: 78.5 and perimeter: 31.4
 
 rectangle1 = Rectangle(length=10, width=5)
 print(f"Area of the rectangle: {rectangle1.calculate_area()} and perimeter: {rectangle1.calculate_perimeter()}")  # Area of the rectangle: 50 and perimeter: 30

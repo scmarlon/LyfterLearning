@@ -6,18 +6,22 @@ class Sing():
     def sing(self):
         print("I can sing")
 
-class eat():
+class Eat():
     def eat(self):
         print("I can eat")
 
-class Animal(Fly, Sing, eat):
+class BlueBird(Fly, Sing, Eat):
     pass
-print("Blue bird:")
-blue_bird = Animal()
+
+class MorphoButterfly(Fly, Eat):
+    pass
+
+print("\nBlue bird:")
+blue_bird = BlueBird()
 blue_bird.fly()  # I can fly
 blue_bird.sing()  # I can sing
 blue_bird.eat()  # I can eat
 print("________________\nMorpho butterfly:")
-morpho_butterfly = Animal()
+morpho_butterfly = MorphoButterfly()
 morpho_butterfly.fly()  # I can fly
 morpho_butterfly.eat()  # I can eat
