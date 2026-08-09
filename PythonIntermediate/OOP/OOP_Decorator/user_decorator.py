@@ -12,13 +12,15 @@ class User():
         # Implementation for calculating age based on date_of_birth
         today = datetime.today()
         age = today.year - self.date_of_birth.year
+        if (today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day):
+            age -= 1
         return age
 
 def validate_age(func):
     def wrapper(user, *args):
         if user.age < 18:
             raise ValueError("The user is not old enough.\n")
-        func(user, *args)
+        return func(user, *args)
     return wrapper
 
 #example
@@ -36,7 +38,7 @@ try:
 except ValueError as e:
     print(e)  # This will raise a ValueError since the user is under 18
 
-user2 = User(date_of_birth=date(2000, 5, 15))
+user2 = User(date_of_birth=date(2007, 8, 10))
 print(f"User's age: {user2.age}")  # This will print the user's
 
 try:
