@@ -1,12 +1,12 @@
-#function decorator to verify if all arguments are numbers
+#Function decorator to verify if all arguments are numbers
 def verify_numbers(func):
     def wrapper(*args):
         for arg in args:
+            #isinstance check to verify if the argument is a number (int or float)
             if not isinstance(arg, (int, float)):
                 raise ValueError(f"Argument {arg} is not a number.")
         return func(*args, )
     return wrapper
-
 
 @verify_numbers
 def age_employees(*args):
